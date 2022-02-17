@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import django.core.mail.backends.filebased
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -65,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'baskets.context_processors.get_baskets',
             ],
         },
     },
@@ -134,3 +137,13 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+DOMAIN_NAME = 'http://127.0.0.1:8000'
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '8001'
+EMAIL_HOST_USER = None
+EMAIL_HOST_PASSWORD = None
+EMAIL_USE_SSL = False
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = 'tmp/emails'
