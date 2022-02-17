@@ -1,7 +1,8 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django import forms
-
 from users.models import User
+import hashlib
+import random
 
 
 class UserLoginForm(AuthenticationForm):
@@ -28,6 +29,16 @@ class UserRegistrationForm(UserCreationForm):
         'class': 'form-control py-4', 'placeholder': 'Введите пароль'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control py-4', 'placeholder': 'Подтвердите пароль'}))
+
+    def save(self):
+        user = super().save()
+        user.is_active = False
+        email_list = list(user.email)
+        random.shuffle(email_list)
+        salt = ''.join(email_list)
+        user.activation_key = hashlib.sha1(salt.encode('utf-8')).hexdigest()
+        user.save()
+        return user
 
     class Meta:
         model = User
